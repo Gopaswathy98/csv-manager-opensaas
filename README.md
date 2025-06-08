@@ -1,119 +1,116 @@
-# Next.js SaaS Starter
+# CSV Manager – SaaS App with Next.js & OpenSaaS
 
-This is a starter template for building a SaaS application using **Next.js** with support for authentication, Stripe integration for payments, and a dashboard for logged-in users.
+This is a full-stack SaaS-style application for uploading, storing, and managing CSV files. Built using **Next.js**, **Node.js**, **PostgreSQL**, and **Prisma**, this project also integrates **OpenSaaS** for user authentication and AI-powered development via **Cursor AI**.
 
-**Demo: [https://next-saas-start.vercel.app/](https://next-saas-start.vercel.app/)**
+Built for the Full Stack Developer Assessment | June 2025
+
+---
 
 ## Features
 
-- Marketing landing page (`/`) with animated Terminal element
-- Pricing page (`/pricing`) which connects to Stripe Checkout
-- Dashboard pages with CRUD operations on users/teams
-- Basic RBAC with Owner and Member roles
-- Subscription management with Stripe Customer Portal
-- Email/password authentication with JWTs stored to cookies
-- Global middleware to protect logged-in routes
-- Local middleware to protect Server Actions or validate Zod schemas
-- Activity logging system for any user events
+-  Auth: User signup/login using OpenSaaS Auth
+-  CSV Upload: Drag-and-drop support with file validation
+-  Data Management: 
+  - Automatic schema mapping for uploaded CSVs
+  - Row and column storage with dynamic headers
+  - Editable, sortable, and paginated table view
+-  Scoped Data: Each user only sees their own uploads
+-  Cursor AI: Used extensively for architecture, code snippets, and troubleshooting
+-  Prisma + PostgreSQL integration for scalable data modeling
 
-## Tech Stack
+---
 
-- **Framework**: [Next.js](https://nextjs.org/)
-- **Database**: [Postgres](https://www.postgresql.org/)
-- **ORM**: [Drizzle](https://orm.drizzle.team/)
-- **Payments**: [Stripe](https://stripe.com/)
+##  Tech Stack
+
+- **Framework**: [Next.js](https://nextjs.org/) with App Router
+- **Database**: [PostgreSQL](https://www.postgresql.org/)
+- **ORM**: [Prisma](https://www.prisma.io/)
 - **UI Library**: [shadcn/ui](https://ui.shadcn.com/)
+- **Auth & Boilerplate**: [OpenSaaS](https://www.opensaas.sh/)
+- **AI Development**: [Cursor AI](https://www.cursor.sh/)
+
+---
 
 ## Getting Started
 
-```bash
-git clone https://github.com/nextjs/saas-starter
-cd saas-starter
-pnpm install
-```
-
-## Running Locally
-
-[Install](https://docs.stripe.com/stripe-cli) and log in to your Stripe account:
+Clone the repo and install dependencies:
 
 ```bash
-stripe login
+git clone https://github.com/Gopaswathy98/csv-manager-opensaas.git
+cd csv-manager-opensaas
+npm install
 ```
 
-Use the included setup script to create your `.env` file:
+Set up your `.env` file:
+
+```env
+DATABASE_URL="postgresql://postgres:admin123@localhost:5432/csvmanager"
+AUTH_SECRET="your-secure-secret"
+BASE_URL="http://localhost:3000"
+NODE_ENV="development"
+```
+
+Run the database:
 
 ```bash
-pnpm db:setup
+npx prisma generate
+npx prisma migrate dev
 ```
 
-Run the database migrations and seed the database with a default user and team:
+Run the dev server:
 
 ```bash
-pnpm db:migrate
-pnpm db:seed
+npm run dev
 ```
 
-This will create the following user and team:
+Open `http://localhost:3000` to get started.
 
-- User: `test@test.com`
-- Password: `admin123`
+---
 
-You can also create new users through the `/sign-up` route.
+## Folder Structure
 
-Finally, run the Next.js development server:
-
-```bash
-pnpm dev
+```
+/app
+  /api/csv          → API routes for upload/list
+  /dashboard        → Table view for CSVs
+  /auth             → Handled by OpenSaaS
+/lib
+  prisma.ts         → Prisma client
+/components
+  CsvManager.tsx    → Dynamic table UI
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser to see the app in action.
+---
 
-You can listen for Stripe webhooks locally through their CLI to handle subscription change events:
+## Completed Tasks
 
-```bash
-stripe listen --forward-to localhost:3000/api/stripe/webhook
-```
+- [x] Authentication with OpenSaaS
+- [x] CSV upload with metadata parsing
+- [x] Prisma schema for `CsvFile` and `CsvRow`
+- [x] Table rendering with dynamic headers
+- [x] Pagination, sorting, and cell editing
+- [x] User-specific data access control
 
-## Testing Payments
+---
 
-To test Stripe payments, use the following test card details:
+## AI Development Log  
 
-- Card Number: `4242 4242 4242 4242`
-- Expiration: Any future date
-- CVC: Any 3-digit number
+This project was built using **Cursor AI** to:
+- Scaffold Prisma schemas
+- Design REST API endpoints
+- Implement upload logic and table rendering
+- Solve environment and migration issues
 
-## Going to Production
+_Exported Cursor AI chat history included in project documentation._
 
-When you're ready to deploy your SaaS application to production, follow these steps:
+---
 
-### Set up a production Stripe webhook
+## 🧪 Testing
 
-1. Go to the Stripe Dashboard and create a new webhook for your production environment.
-2. Set the endpoint URL to your production API route (e.g., `https://yourdomain.com/api/stripe/webhook`).
-3. Select the events you want to listen for (e.g., `checkout.session.completed`, `customer.subscription.updated`).
+Use sample CSVs and login via the `/sign-up` route. All uploads are scoped to the logged-in user. Admin access is not required.
 
-### Deploy to Vercel
+---
 
-1. Push your code to a GitHub repository.
-2. Connect your repository to [Vercel](https://vercel.com/) and deploy it.
-3. Follow the Vercel deployment process, which will guide you through setting up your project.
+## 📄 License
 
-### Add environment variables
-
-In your Vercel project settings (or during deployment), add all the necessary environment variables. Make sure to update the values for the production environment, including:
-
-1. `BASE_URL`: Set this to your production domain.
-2. `STRIPE_SECRET_KEY`: Use your Stripe secret key for the production environment.
-3. `STRIPE_WEBHOOK_SECRET`: Use the webhook secret from the production webhook you created in step 1.
-4. `POSTGRES_URL`: Set this to your production database URL.
-5. `AUTH_SECRET`: Set this to a random string. `openssl rand -base64 32` will generate one.
-
-## Other Templates
-
-While this template is intentionally minimal and to be used as a learning resource, there are other paid versions in the community which are more full-featured:
-
-- https://achromatic.dev
-- https://shipfa.st
-- https://makerkit.dev
-- https://zerotoshipped.com
-- https://turbostarter.dev
+MIT © 2025 – 
